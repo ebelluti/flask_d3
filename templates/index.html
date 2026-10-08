@@ -23,17 +23,55 @@
 .map-facet {
   float:left;
 }
+#players-section { clear: both; padding-top: 16px; }
+.table-scroll { overflow-x: auto; }
+#players-table { border-collapse: collapse; width: 100%; max-width: 1100px; }
+#players-table th, #players-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+#players-table th { background: #f3f3f3; }
+#players-table tbody tr:nth-child(even) { background: #fafafa; }
+.pagination { margin: 12px 0; display: flex; align-items: center; gap: 12px; }
 
 </style>
 <body>
   <h1>US Map by revenue</h1>
   <input id="yearSlider" type="range" min="1942" max="2008" value="2008" class="slider" id="myRange"><label id="yearSliderLabel" for="yearSlider">2008</label>
   <div id="maps"></div>
+  <section id="players-section" aria-labelledby="players-heading">
+    <h2 id="players-heading">FIFA 20 players</h2>
+    <form id="nationality-form">
+      <label for="player-name">Player name</label>
+      <input id="player-name" name="player" list="player-suggestions"
+        placeholder="e.g. L. Messi" autocomplete="off" required
+        aria-describedby="player-help">
+      <datalist id="player-suggestions"></datalist>
+      <button id="nationality-submit" type="submit">Get nationality</button>
+      <p id="player-help">Type at least two characters and select a suggested name.</p>
+      <p id="nationality-result" role="status" aria-live="polite"></p>
+    </form>
+    <p id="players-status" role="status" aria-live="polite">Loading players…</p>
+    <div class="table-scroll">
+      <table id="players-table">
+        <thead><tr>
+          <th scope="col">Player</th><th scope="col">Age</th>
+          <th scope="col">Nationality</th><th scope="col">Club</th>
+          <th scope="col">Positions</th><th scope="col">Overall</th>
+          <th scope="col">Potential</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button id="players-previous" type="button" disabled>Previous</button>
+      <span id="players-page"></span>
+      <button id="players-next" type="button" disabled>Next</button>
+    </div>
+  </section>
   <div><a href="https://github.com/john-guerra/flask_d3_example">See the code here</a></div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
 <script src="static/js/USCloroplethByState.js"></script>
+<script src="static/js/players.js"></script>
 <script>
 /* global d3, USCloroplethByState */
 
