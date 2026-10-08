@@ -41,14 +41,19 @@ def get_nationality():
     player = request.args.get("player", "").strip()
     if not player:
         return jsonify(error="player query parameter is required"), 400
-    with sqlite3.connect(f"file:{PLAYERS_DB}?mode=ro", uri=True) as connection:
-        row = connection.execute(
+    con = sqlite3.connect(f"file:{PLAYERS_DB}?mode=ro", uri=True)
+    try:
+        cur = con.cursor()
+        res = cur.execute(
             "SELECT nationality FROM players WHERE short_name = ?",
             (player,),
-        ).fetchone()
+        )
+        row = res.fetchone()
+    finally:
+        con.close()
     if row is None:
         return jsonify(error="Player not found"), 404
-    return jsonify(nationality=row[0])
+    return {"nationality": row[0]}
 
 @app.route("/players")
 def players_list():
